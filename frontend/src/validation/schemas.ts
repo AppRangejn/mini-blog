@@ -5,19 +5,19 @@ export const loginSchema = yup.object({
   email: yup
     .string()
     .trim()
-    .email('Введіть коректний email')
-    .required("Email є обов'язковим"),
+    .email('Enter a valid email address')
+    .required('Email is required'),
   password: yup
     .string()
     .min(
       VALIDATION_LIMITS.PASSWORD_MIN,
-      `Мінімум ${VALIDATION_LIMITS.PASSWORD_MIN} символів`,
+      `Minimum ${VALIDATION_LIMITS.PASSWORD_MIN} characters`,
     )
     .max(
       VALIDATION_LIMITS.PASSWORD_MAX,
-      `Максимум ${VALIDATION_LIMITS.PASSWORD_MAX} символів`,
+      `Maximum ${VALIDATION_LIMITS.PASSWORD_MAX} characters`,
     )
-    .required("Пароль є обов'язковим"),
+    .required('Password is required'),
 });
 
 export const registerSchema = yup.object({
@@ -26,29 +26,29 @@ export const registerSchema = yup.object({
     .trim()
     .min(
       VALIDATION_LIMITS.NAME_MIN,
-      `Мінімум ${VALIDATION_LIMITS.NAME_MIN} символи`,
+      `Minimum ${VALIDATION_LIMITS.NAME_MIN} characters`,
     )
     .max(
       VALIDATION_LIMITS.NAME_MAX,
-      `Максимум ${VALIDATION_LIMITS.NAME_MAX} символів`,
+      `Maximum ${VALIDATION_LIMITS.NAME_MAX} characters`,
     )
-    .required("Ім'я є обов'язковим"),
+    .required('Name is required'),
   email: yup
     .string()
     .trim()
-    .email('Введіть коректний email')
-    .required("Email є обов'язковим"),
+    .email('Enter a valid email address')
+    .required('Email is required'),
   password: yup
     .string()
     .min(
       VALIDATION_LIMITS.PASSWORD_MIN,
-      `Мінімум ${VALIDATION_LIMITS.PASSWORD_MIN} символів`,
+      `Minimum ${VALIDATION_LIMITS.PASSWORD_MIN} characters`,
     )
     .max(
       VALIDATION_LIMITS.PASSWORD_MAX,
-      `Максимум ${VALIDATION_LIMITS.PASSWORD_MAX} символів`,
+      `Maximum ${VALIDATION_LIMITS.PASSWORD_MAX} characters`,
     )
-    .required("Пароль є обов'язковим"),
+    .required('Password is required'),
 });
 
 export const postSchema = yup.object({
@@ -57,19 +57,19 @@ export const postSchema = yup.object({
     .trim()
     .min(
       VALIDATION_LIMITS.TITLE_MIN,
-      `Мінімум ${VALIDATION_LIMITS.TITLE_MIN} символи`,
+      `Minimum ${VALIDATION_LIMITS.TITLE_MIN} characters`,
     )
     .max(
       VALIDATION_LIMITS.TITLE_MAX,
-      `Максимум ${VALIDATION_LIMITS.TITLE_MAX} символів`,
+      `Maximum ${VALIDATION_LIMITS.TITLE_MAX} characters`,
     )
-    .required("Заголовок є обов'язковим"),
+    .required('Title is required'),
   excerpt: yup
     .string()
     .trim()
     .max(
       VALIDATION_LIMITS.EXCERPT_MAX,
-      `Короткий опис не може перевищувати ${VALIDATION_LIMITS.EXCERPT_MAX} символів`,
+      `Excerpt cannot exceed ${VALIDATION_LIMITS.EXCERPT_MAX} characters`,
     )
     .optional(),
   content: yup
@@ -77,22 +77,22 @@ export const postSchema = yup.object({
     .trim()
     .min(
       VALIDATION_LIMITS.CONTENT_MIN,
-      `Текст поста має містити щонайменше ${VALIDATION_LIMITS.CONTENT_MIN} символів`,
+      `Content must be at least ${VALIDATION_LIMITS.CONTENT_MIN} characters`,
     )
-    .required("Текст поста є обов'язковим"),
+    .required('Content is required'),
   imageUrl: yup
     .string()
     .trim()
     .max(
       VALIDATION_LIMITS.IMAGE_URL_MAX,
-      `Посилання не може перевищувати ${VALIDATION_LIMITS.IMAGE_URL_MAX} символів`,
+      `URL cannot exceed ${VALIDATION_LIMITS.IMAGE_URL_MAX} characters`,
     )
     .test(
       'valid-url',
-      'Введіть коректний URL (http:// або https://)',
+      'Enter a valid image URL (http:// or https://)',
       (value) => {
         if (!value) return true;
-        return /^https?:\/\/.+/.test(value);
+        return yup.string().url().isValidSync(value);
       },
     )
     .optional(),

@@ -16,8 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'MiniBlog — Міні-блог на Next.js',
-  description: 'Full-stack міні-блог на Next.js, Express та PostgreSQL',
+  title: 'MINI BLOG — Digital Editorial & Mini-Blog',
+  description:
+    'Full-stack mini-blog built with Next.js, Express and PostgreSQL',
 };
 
 export default function RootLayout({
@@ -27,19 +28,21 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="uk"
+      lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-screen bg-slate-50 text-slate-900">
+      <body className="min-h-screen bg-[#F7F8FA] text-slate-950">
         <AuthProvider>
           <Suspense
             fallback={
-              <div className="h-[69px] border-b border-slate-200 bg-white" />
+              <div className="h-20 border-b border-slate-200/80 bg-white" />
             }
           >
             <Header />
           </Suspense>
-          <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
+          <main className="mx-auto max-w-7xl px-4 py-8 sm:px-8">
+            {children}
+          </main>
         </AuthProvider>
       </body>
     </html>

@@ -3,6 +3,7 @@
 import { ROUTES } from '@/constants';
 import { postsApi } from '@/lib/api';
 import { Post } from '@/types';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
@@ -21,7 +22,7 @@ function PostDetailsContent() {
         const data = await postsApi.getById(params.id);
         setPost(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Пост не знайдено');
+        setError(err instanceof Error ? err.message : 'Story not found');
       } finally {
         setIsLoading(false);
       }
@@ -32,40 +33,41 @@ function PostDetailsContent() {
 
   if (isLoading) {
     return (
-      <div className="py-16 text-center text-sm text-slate-500">
-        Завантаження поста...
+      <div className="py-20 text-center text-sm font-medium text-slate-500">
+        Loading story...
       </div>
     );
   }
 
   if (error || !post) {
     return (
-      <div className="space-y-4">
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-          {error || 'Пост не знайдено'}
+      <div className="mx-auto max-w-3xl space-y-4">
+        <div className="rounded-3xl border border-rose-200 bg-rose-50 p-5 text-sm font-medium text-rose-700">
+          {error || 'Story not found'}
         </div>
         <Link
           href={ROUTES.HOME}
-          className="inline-block text-sm font-medium text-indigo-600 hover:underline"
+          className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-800 transition-colors hover:bg-slate-100"
         >
-          ← Повернутися до списку постів
+          <span aria-hidden="true">←</span>
+          <span>Back to all stories</span>
         </Link>
       </div>
     );
   }
 
-  const createdDate = new Date(post.createdAt).toLocaleDateString('uk-UA', {
+  const createdDate = new Date(post.createdAt).toLocaleDateString('en-US', {
+    month: 'short',
     day: 'numeric',
-    month: 'long',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
   });
 
   const isUpdated = post.updatedAt !== post.createdAt;
-  const updatedDate = new Date(post.updatedAt).toLocaleDateString('uk-UA', {
+  const updatedDate = new Date(post.updatedAt).toLocaleDateString('en-US', {
+    month: 'short',
     day: 'numeric',
-    month: 'long',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
@@ -75,35 +77,41 @@ function PostDetailsContent() {
     <article className="mx-auto max-w-3xl">
       <Link
         href={ROUTES.HOME}
-        className="mb-6 inline-flex items-center text-sm font-medium text-slate-600 transition hover:text-indigo-600"
+        className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-950"
       >
-        ← Назад до всіх постів
+        <span aria-hidden="true">←</span>
+        <span>Back to all stories</span>
       </Link>
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white p-3.5 sm:p-5">
         {post.imageUrl && (
-          <img
-            src={post.imageUrl}
-            alt={post.title}
-            className="max-h-96 w-full object-cover"
-          />
+          <div className="relative h-72 w-full overflow-hidden rounded-2xl bg-slate-100 sm:h-96">
+            <Image
+              src={post.imageUrl}
+              alt={post.title}
+              fill
+              unoptimized
+              className="object-cover"
+            />
+          </div>
         )}
 
-        <div className="p-6 sm:p-8">
-          <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-slate-500">
-            <span className="rounded-full bg-slate-100 px-3 py-1 font-medium text-slate-700">
-              Автор: {post.author?.name || 'Невідомий'}
+        <div className="px-2 pb-3 pt-6 sm:px-4">
+          <div className="mb-4 flex flex-wrap items-center gap-2.5 text-xs font-medium text-slate-500">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-100 px-3 py-1 font-bold text-violet-700">
+              <span className="h-1.5 w-1.5 rounded-full bg-violet-600" />
+              {post.author?.name || 'Editorial'}
             </span>
-            <span>Опубліковано: {createdDate}</span>
-            {isUpdated && <span>• Оновлено: {updatedDate}</span>}
+            <span>Published: {createdDate}</span>
+            {isUpdated && <span>• Updated: {updatedDate}</span>}
           </div>
 
-          <h1 className="mb-4 text-2xl font-bold leading-tight text-slate-900 sm:text-3xl">
+          <h1 className="mb-5 text-2xl font-black leading-tight tracking-tight text-slate-950 sm:text-3xl">
             {post.title}
           </h1>
 
           {post.excerpt && (
-            <p className="mb-6 border-l-4 border-indigo-500 pl-4 text-base italic text-slate-600">
+            <p className="mb-6 rounded-2xl border-l-4 border-violet-600 bg-slate-50 px-4 py-3 text-base font-medium text-slate-700">
               {post.excerpt}
             </p>
           )}
@@ -121,8 +129,8 @@ export default function PostDetailsPage() {
   return (
     <Suspense
       fallback={
-        <div className="py-16 text-center text-sm text-slate-500">
-          Завантаження поста...
+        <div className="py-20 text-center text-sm font-medium text-slate-500">
+          Loading story...
         </div>
       }
     >

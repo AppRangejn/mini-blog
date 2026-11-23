@@ -39,21 +39,30 @@ export default function RegisterPage() {
       await register(data.name, data.email, data.password);
       router.push(ROUTES.HOME);
     } catch (err) {
-      setServerError(err instanceof Error ? err.message : 'Помилка реєстрації');
+      setServerError(
+        err instanceof Error ? err.message : 'Registration failed',
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="mx-auto max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-      <h1 className="mb-1 text-2xl font-bold text-slate-900">Реєстрація</h1>
-      <p className="mb-6 text-sm text-slate-600">
-        Створіть новий обліковий запис користувача
-      </p>
+    <div className="mx-auto max-w-md rounded-3xl border border-slate-200/90 bg-white p-7 sm:p-9">
+      <div className="mb-6">
+        <span className="inline-block rounded-full bg-violet-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-violet-700">
+          GET STARTED
+        </span>
+        <h1 className="mt-3 text-2xl font-black tracking-tight text-slate-950">
+          Create account
+        </h1>
+        <p className="mt-1 text-sm text-slate-600">
+          Join the platform in seconds
+        </p>
+      </div>
 
       {serverError && (
-        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        <div className="mb-4 rounded-2xl border border-rose-200 bg-rose-50 p-3.5 text-sm font-medium text-rose-700">
           {serverError}
         </div>
       )}
@@ -62,27 +71,29 @@ export default function RegisterPage() {
         <div>
           <label
             htmlFor="name"
-            className="mb-1 block text-sm font-medium text-slate-700"
+            className="mb-1.5 block text-xs font-semibold text-slate-600"
           >
-            Ім&apos;я
+            Name
           </label>
           <input
             id="name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Олександр"
-            className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            placeholder="Alex"
+            className="w-full rounded-xl border border-slate-200 bg-slate-100/80 px-3.5 py-2.5 text-sm font-medium text-slate-900 outline-none transition-colors focus:border-violet-500 focus:bg-white"
           />
           {fieldErrors.name && (
-            <p className="mt-1 text-xs text-red-600">{fieldErrors.name}</p>
+            <p className="mt-1 text-xs font-medium text-rose-600">
+              {fieldErrors.name}
+            </p>
           )}
         </div>
 
         <div>
           <label
             htmlFor="email"
-            className="mb-1 block text-sm font-medium text-slate-700"
+            className="mb-1.5 block text-xs font-semibold text-slate-600"
           >
             Email
           </label>
@@ -92,49 +103,53 @@ export default function RegisterPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="user@example.com"
-            className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            className="w-full rounded-xl border border-slate-200 bg-slate-100/80 px-3.5 py-2.5 text-sm font-medium text-slate-900 outline-none transition-colors focus:border-violet-500 focus:bg-white"
           />
           {fieldErrors.email && (
-            <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>
+            <p className="mt-1 text-xs font-medium text-rose-600">
+              {fieldErrors.email}
+            </p>
           )}
         </div>
 
         <div>
           <label
             htmlFor="password"
-            className="mb-1 block text-sm font-medium text-slate-700"
+            className="mb-1.5 block text-xs font-semibold text-slate-600"
           >
-            Пароль
+            Password
           </label>
           <input
             id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Мінімум 6 символів"
-            className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            placeholder="Minimum 6 characters"
+            className="w-full rounded-xl border border-slate-200 bg-slate-100/80 px-3.5 py-2.5 text-sm font-medium text-slate-900 outline-none transition-colors focus:border-violet-500 focus:bg-white"
           />
           {fieldErrors.password && (
-            <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>
+            <p className="mt-1 text-xs font-medium text-rose-600">
+              {fieldErrors.password}
+            </p>
           )}
         </div>
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-xl bg-indigo-600 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-60"
+          className="mt-2 w-full rounded-full bg-violet-600 py-2.5 text-sm font-bold text-white shadow-sm shadow-violet-600/20 transition-colors hover:bg-violet-700 disabled:opacity-60"
         >
-          {isSubmitting ? 'Реєстрація...' : 'Зареєструватися'}
+          {isSubmitting ? 'Creating account...' : 'Sign up'}
         </button>
       </form>
 
       <p className="mt-6 text-center text-sm text-slate-600">
-        Вже є акаунт?{' '}
+        Already have an account?{' '}
         <Link
           href={ROUTES.LOGIN}
-          className="font-semibold text-indigo-600 hover:underline"
+          className="font-bold text-violet-600 hover:underline"
         >
-          Увійти
+          Sign in
         </Link>
       </p>
     </div>
