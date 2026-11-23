@@ -275,3 +275,7 @@ npm run start
 
 - `auth.http` — реєстрація, login і `/auth/me`;
 - `posts.http` — публічні та адмінські операції з постами.
+
+### Адмін акаунт через seed
+email: admin@example.com
+password: ChangeMe123!
