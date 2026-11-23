@@ -7,7 +7,10 @@ export type UserRole = (typeof ROLES)[keyof typeof ROLES];
 
 export const AUTH_CONFIG = {
   SALT_ROUNDS: 10,
-  JWT_EXPIRES_IN: '24h',
+  JWT_EXPIRES_IN: '2h',
+  JWT_ISSUER: 'mini-blog-api',
+  JWT_AUDIENCE: 'mini-blog-client',
+  JWT_TOKEN_TYPE: 'access',
 } as const;
 
 export const VALIDATION_LIMITS = {

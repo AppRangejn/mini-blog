@@ -1,13 +1,44 @@
 import cors from 'cors';
 import express from 'express';
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
 import { errorHandler } from './middlewares/error.mw';
 import router from './routes';
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-app.use('/api', router);
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Too many auth attempts, please try again later' },
+});
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Too many requests, please try again later' },
+});
+
+app.use(helmet());
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  }),
+);
+app.use(express.json({ limit: '100kb' }));
+
+app.use('/api/auth', authLimiter);
+app.use('/api', apiLimiter, router);
 app.use(errorHandler);
 
 export default app;
