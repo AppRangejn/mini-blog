@@ -8,7 +8,7 @@ import { User } from '../database/models';
 const signToken = (user: User): string =>
   jwt.sign(
     { id: user.id, email: user.email, role: user.role },
-    process.env.JWT_SECRET || 'secret',
+    process.env.JWT_SECRET!,
     { expiresIn: AUTH_CONFIG.JWT_EXPIRES_IN },
   );
 

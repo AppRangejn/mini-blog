@@ -22,7 +22,7 @@ export const authMw = (
 
   const token = authHeader.split(' ')[1];
   try {
-    const secret = process.env.JWT_SECRET || 'secret';
+    const secret = process.env.JWT_SECRET!;
     req.user = jwt.verify(token, secret) as JwtPayload;
     next();
   } catch {
