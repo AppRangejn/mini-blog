@@ -1,4 +1,5 @@
-import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { Header } from '@/components/header/Header';
 import { AuthProvider } from '@/context/AuthContext';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
@@ -18,7 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'MINI BLOG — Digital Editorial & Mini-Blog',
   description:
-    'Full-stack mini-blog built with Next.js, Express and PostgreSQL',
+    'Mini-blog',
 };
 
 export default function RootLayout({
@@ -31,7 +32,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-screen bg-[#F7F8FA] text-slate-950">
+      <body className="flex min-h-screen flex-col bg-[#F7F8FA] text-slate-950">
         <AuthProvider>
           <Suspense
             fallback={
@@ -40,9 +41,10 @@ export default function RootLayout({
           >
             <Header />
           </Suspense>
-          <main className="mx-auto max-w-7xl px-4 py-8 sm:px-8">
+          <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-8">
             {children}
           </main>
+          <Footer />
         </AuthProvider>
       </body>
     </html>

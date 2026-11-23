@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import createError from 'http-errors';
+import { Op, Order, WhereOptions } from 'sequelize';
 import { Post, User } from '../database/models';
 
 const authorInclude = {
@@ -16,17 +17,65 @@ const parsePostId = (rawId: string | string[] | undefined): number => {
   return id;
 };
 
+const resolvePostOrder = (rawSort: unknown): Order => {
+  if (rawSort === 'oldest') return [['createdAt', 'ASC']];
+  if (rawSort === 'title') return [['title', 'ASC']];
+  return [['createdAt', 'DESC']];
+};
+
+const resolveSearchWhere = (rawSearch: unknown): WhereOptions => {
+  const search = typeof rawSearch === 'string' ? rawSearch.trim() : '';
+  if (!search) return {};
+
+  const pattern = `%${search}%`;
+  return {
+    [Op.or]: [
+      { title: { [Op.iLike]: pattern } },
+      { excerpt: { [Op.iLike]: pattern } },
+      { content: { [Op.iLike]: pattern } },
+    ],
+  };
+};
+
 export const getAllPosts = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const posts = await Post.findAll({
+    const order = resolvePostOrder(req.query.sort);
+    const where = resolveSearchWhere(req.query.search);
+
+    if (!req.query.page && !req.query.limit) {
+      const posts = await Post.findAll({
+        where,
+        include: [authorInclude],
+        order,
+      });
+      res.json(posts);
+      return;
+    }
+
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 6));
+
+    const { rows: posts, count: total } = await Post.findAndCountAll({
+      where,
       include: [authorInclude],
-      order: [['createdAt', 'DESC']],
+      order,
+      limit,
+      offset: (page - 1) * limit,
     });
-    res.json(posts);
+
+    res.json({
+      posts,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.max(1, Math.ceil(total / limit)),
+      },
+    });
   } catch (err) {
     next(err);
   }

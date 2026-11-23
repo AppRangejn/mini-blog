@@ -8,6 +8,17 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction,
 ): void => {
+  if (
+    err instanceof SyntaxError &&
+    'status' in err &&
+    err.status === 400
+  ) {
+    res.status(400).json({
+      message: 'Invalid JSON body',
+    });
+    return;
+  }
+
   if (err instanceof ValidationError) {
     res.status(400).json({
       message: 'Validation error',

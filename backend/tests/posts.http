@@ -1,61 +1,61 @@
 @baseUrl = http://localhost:5000/api
 
-### 1. Логін адміна для отримання токена з роллю admin
+### 1. Log in as admin to obtain an admin token
 # @name adminLogin
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "admin1@blog.com",
-  "password": "password123"
+  "email": "admin@example.com",
+  "password": "ChangeMe123!"
 }
 
 ###
 @token = {{adminLogin.response.body.token}}
 
-### 2. Отримати всі пости (публічний)
+### 2. Get all posts (public)
 GET {{baseUrl}}/posts
 
-### 3. Створити пост про погоду (тільки admin)
+### 3. Create a weather post (admin only)
 # @name createdPost
 POST {{baseUrl}}/posts
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "title": "Прогноз погоди на вихідні: очікується похолодання та перший сніг",
-  "excerpt": "Синоптики попереджають про зниження температури до -2°C вночі та поривчастий північно-західний вітер.",
-  "content": "У найближчі дні погодні умови визначатиме холодний атмосферний фронт. Вдень температура повітря триматиметься в межах +1...+4°C, а в нічні години опускатиметься нижче нуля. Водіям варто бути обережними через можливу ожеледицю на дорогах вранці та ввечері.",
+  "title": "Weekend weather forecast: colder temperatures and the first snow",
+  "excerpt": "Forecasters warn of overnight temperatures dropping to -2°C and gusty northwesterly winds.",
+  "content": "A cold front will shape the weather over the next few days. Daytime temperatures will range from +1°C to +4°C, while overnight temperatures will fall below zero. Drivers should watch for possible icy roads in the morning and evening.",
   "imageUrl": "https://images.unsplash.com/photo-1483664852095-d6cc6870702d?w=800"
 }
 
-### 4. Створити другий пост про погоду (щоб було кілька карток на головній)
+### 4. Create a second weather post (to show multiple homepage cards)
 POST {{baseUrl}}/posts
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "title": "Як атмосферний тиск впливає на самопочуття восени",
-  "excerpt": "Розбираємося, чому різкі перепади погоди викликають втому та як підготувати організм до зміни сезону.",
-  "content": "Різке падіння або зростання атмосферного тиску часто супроводжується зміною вологості повітря та температури. Лікарі радять у такі дні дотримуватися стабільного режиму сну, пити достатньо води та уникати перевтоми.",
+  "title": "How atmospheric pressure affects well-being in autumn",
+  "excerpt": "Learn why sudden weather changes can cause fatigue and how to prepare for the change of seasons.",
+  "content": "Sharp changes in atmospheric pressure are often accompanied by shifts in humidity and temperature. Doctors recommend keeping a regular sleep schedule, drinking enough water, and avoiding overexertion on these days.",
   "imageUrl": "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800"
 }
 
-### 5. Отримати пост за ID (публічний)
+### 5. Get a post by ID (public)
 @postId = {{createdPost.response.body.id}}
 
 GET {{baseUrl}}/posts/{{postId}}
 
-### 6. Оновити пост (тільки admin)
+### 6. Update a post (admin only)
 PUT {{baseUrl}}/posts/{{postId}}
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "title": "Оновлений прогноз погоди: сонячний початок тижня без опадів",
-  "excerpt": "Антициклон принесе прояснення, проте нічні заморозки збережуться."
+  "title": "Updated weather forecast: a sunny start to the week with no precipitation",
+  "excerpt": "High pressure will bring clearer skies, although overnight frosts will continue."
 }
 
-### 7. Видалити пост (тільки admin)
+### 7. Delete a post (admin only)
 DELETE {{baseUrl}}/posts/{{postId}}
 Authorization: Bearer {{token}}

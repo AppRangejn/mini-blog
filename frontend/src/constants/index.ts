@@ -30,3 +30,22 @@ export const VALIDATION_LIMITS = {
   CONTENT_MIN: 10,
   IMAGE_URL_MAX: 255,
 } as const;
+
+export const POST_SORT = {
+  NEWEST: 'newest',
+  OLDEST: 'oldest',
+  TITLE: 'title',
+} as const;
+
+export type PostSortOption = (typeof POST_SORT)[keyof typeof POST_SORT];
+
+export const POST_SORT_OPTIONS: { value: PostSortOption; label: string }[] = [
+  { value: POST_SORT.NEWEST, label: 'Newest' },
+  { value: POST_SORT.OLDEST, label: 'Oldest' },
+  { value: POST_SORT.TITLE, label: 'A–Z' },
+];
+
+export const PAGINATION_CONFIG = {
+  FEED_LIMIT: 6,
+  ADMIN_LIMIT: 5,
+} as const;

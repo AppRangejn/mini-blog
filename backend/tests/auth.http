@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:5000/api
 
-### 1. Реєстрація звичайного користувача
+### 1. Register a regular user
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
@@ -10,7 +10,7 @@ Content-Type: application/json
   "password": "password123"
 }
 
-### 2. Перевірка валідації (очікуємо 400 Validation error)
+### 2. Validate input (expect 400 Validation error)
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
@@ -20,7 +20,7 @@ Content-Type: application/json
   "password": "123"
 }
 
-### 3. Логін (зберігає токен у змінну @login)
+### 3. Log in (save token as @login)
 # @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
@@ -30,7 +30,7 @@ Content-Type: application/json
   "password": "password123"
 }
 
-### 4. Отримати поточного користувача (/me)
+### 4. Get the current user (/me)
 @token = {{login.response.body.token}}
 
 GET {{baseUrl}}/auth/me

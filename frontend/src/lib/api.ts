@@ -1,5 +1,12 @@
-import { STORAGE_KEYS } from '@/constants';
-import { AuthResponse, Post, PostPayload, User } from '@/types';
+import { PAGINATION_CONFIG, POST_SORT, STORAGE_KEYS } from '@/constants';
+import {
+  AuthResponse,
+  PaginatedPostsResponse,
+  Post,
+  PostPayload,
+  PostSortOption,
+  User,
+} from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -67,6 +74,25 @@ export const authApi = {
 
 export const postsApi = {
   getAll: () => request<Post[]>('/posts', { cache: 'no-store' }),
+
+  getPaginated: (
+    page = 1,
+    limit: number = PAGINATION_CONFIG.FEED_LIMIT,
+    sort: PostSortOption = POST_SORT.NEWEST,
+    search = '',
+  ) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+      sort,
+    });
+    if (search.trim()) {
+      params.set('search', search.trim());
+    }
+    return request<PaginatedPostsResponse>(`/posts?${params.toString()}`, {
+      cache: 'no-store',
+    });
+  },
 
   getById: (id: number | string) =>
     request<Post>(`/posts/${id}`, { cache: 'no-store' }),

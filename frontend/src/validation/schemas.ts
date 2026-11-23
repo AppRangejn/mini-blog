@@ -92,7 +92,9 @@ export const postSchema = yup.object({
       'Enter a valid image URL (http:// or https://)',
       (value) => {
         if (!value) return true;
-        return yup.string().url().isValidSync(value);
+        return (
+          /^https?:\/\//.test(value) && yup.string().url().isValidSync(value)
+        );
       },
     )
     .optional(),

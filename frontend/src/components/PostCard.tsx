@@ -32,6 +32,7 @@ export function PostCard({ post }: PostCardProps) {
             alt={post.title}
             fill
             unoptimized
+            loading="eager"
             className="object-cover"
           />
         ) : (

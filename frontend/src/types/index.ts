@@ -1,6 +1,7 @@
-import { ROLES } from '@/constants';
+import { POST_SORT, ROLES } from '@/constants';
 
 export type UserRole = (typeof ROLES)[keyof typeof ROLES];
+export type PostSortOption = (typeof POST_SORT)[keyof typeof POST_SORT];
 
 export interface User {
   id: number;
@@ -24,6 +25,18 @@ export interface Post {
   author?: PostAuthor;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface PaginationMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+export interface PaginatedPostsResponse {
+  posts: Post[];
+  pagination: PaginationMeta;
 }
 
 export interface AuthResponse {
