@@ -1,0 +1,39 @@
+import { ROLES } from '@/constants';
+
+export type UserRole = (typeof ROLES)[keyof typeof ROLES];
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: UserRole;
+}
+
+export interface PostAuthor {
+  id: number;
+  name: string;
+}
+
+export interface Post {
+  id: number;
+  title: string;
+  excerpt: string | null;
+  content: string;
+  imageUrl: string | null;
+  authorId: number;
+  author?: PostAuthor;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: User;
+}
+
+export interface PostPayload {
+  title: string;
+  excerpt?: string | null;
+  content: string;
+  imageUrl?: string | null;
+}
