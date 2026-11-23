@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
+import { UserRole } from '../constants';
 
 interface JwtPayload {
   id: number;
   email: string;
-  role: 'user' | 'admin';
+  role: UserRole;
 }
 
 export const authMw = (

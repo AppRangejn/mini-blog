@@ -42,7 +42,7 @@ Post.init(
       allowNull: false,
     },
     excerpt: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(300),
       allowNull: true,
     },
     content: {

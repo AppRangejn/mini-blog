@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import createError from 'http-errors';
+import { ROLES } from '../constants';
 
 export const adminMw = (
   req: Request,
   _res: Response,
   next: NextFunction,
 ): void => {
-  if (req.user?.role !== 'admin') {
+  if (req.user?.role !== ROLES.ADMIN) {
     next(createError(403, 'Forbidden: admin access required'));
     return;
   }

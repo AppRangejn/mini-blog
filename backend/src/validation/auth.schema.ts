@@ -1,11 +1,15 @@
 import * as yup from 'yup';
+import { VALIDATION_LIMITS } from '../constants';
 
 export const registerSchema = yup.object({
   name: yup
     .string()
     .trim()
-    .min(2, 'Name must be at least 2 characters')
-    .max(50)
+    .min(
+      VALIDATION_LIMITS.NAME_MIN,
+      `Name must be at least ${VALIDATION_LIMITS.NAME_MIN} characters`,
+    )
+    .max(VALIDATION_LIMITS.NAME_MAX)
     .required('Name is required'),
   email: yup
     .string()
@@ -14,8 +18,11 @@ export const registerSchema = yup.object({
     .required('Email is required'),
   password: yup
     .string()
-    .min(6, 'Password must be at least 6 characters')
-    .max(100)
+    .min(
+      VALIDATION_LIMITS.PASSWORD_MIN,
+      `Password must be at least ${VALIDATION_LIMITS.PASSWORD_MIN} characters`,
+    )
+    .max(VALIDATION_LIMITS.PASSWORD_MAX)
     .required('Password is required'),
 });
 

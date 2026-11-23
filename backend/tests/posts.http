@@ -1,0 +1,61 @@
+@baseUrl = http://localhost:5000/api
+
+### 1. Логін адміна для отримання токена з роллю admin
+# @name adminLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@blog.com",
+  "password": "password123"
+}
+
+###
+@token = {{adminLogin.response.body.token}}
+
+### 2. Отримати всі пости (публічний)
+GET {{baseUrl}}/posts
+
+### 3. Створити пост про погоду (тільки admin)
+# @name createdPost
+POST {{baseUrl}}/posts
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Прогноз погоди на вихідні: очікується похолодання та перший сніг",
+  "excerpt": "Синоптики попереджають про зниження температури до -2°C вночі та поривчастий північно-західний вітер.",
+  "content": "У найближчі дні погодні умови визначатиме холодний атмосферний фронт. Вдень температура повітря триматиметься в межах +1...+4°C, а в нічні години опускатиметься нижче нуля. Водіям варто бути обережними через можливу ожеледицю на дорогах вранці та ввечері.",
+  "imageUrl": "https://images.unsplash.com/photo-1483664852095-d6cc6870702d?w=800"
+}
+
+### 4. Створити другий пост про погоду (щоб було кілька карток на головній)
+POST {{baseUrl}}/posts
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Як атмосферний тиск впливає на самопочуття восени",
+  "excerpt": "Розбираємося, чому різкі перепади погоди викликають втому та як підготувати організм до зміни сезону.",
+  "content": "Різке падіння або зростання атмосферного тиску часто супроводжується зміною вологості повітря та температури. Лікарі радять у такі дні дотримуватися стабільного режиму сну, пити достатньо води та уникати перевтоми.",
+  "imageUrl": "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800"
+}
+
+### 5. Отримати пост за ID (публічний)
+@postId = {{createdPost.response.body.id}}
+
+GET {{baseUrl}}/posts/{{postId}}
+
+### 6. Оновити пост (тільки admin)
+PUT {{baseUrl}}/posts/{{postId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Оновлений прогноз погоди: сонячний початок тижня без опадів",
+  "excerpt": "Антициклон принесе прояснення, проте нічні заморозки збережуться."
+}
+
+### 7. Видалити пост (тільки admin)
+DELETE {{baseUrl}}/posts/{{postId}}
+Authorization: Bearer {{token}}

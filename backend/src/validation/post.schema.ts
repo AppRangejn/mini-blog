@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { VALIDATION_LIMITS } from '../constants';
 
 const optionalString = yup
   .string()
@@ -7,34 +8,60 @@ const optionalString = yup
   .nullable()
   .optional();
 
+const optionalImageUrl = optionalString
+  .max(
+    VALIDATION_LIMITS.IMAGE_URL_MAX,
+    `Image URL must be at most ${VALIDATION_LIMITS.IMAGE_URL_MAX} characters`,
+  )
+  .url('Image URL must be a valid URL')
+  .matches(/^https?:\/\/.+/, 'Image URL must start with http:// or https://');
+
 export const createPostSchema = yup.object({
   title: yup
     .string()
     .trim()
-    .min(3, 'Title must be at least 3 characters')
-    .max(200)
+    .min(
+      VALIDATION_LIMITS.TITLE_MIN,
+      `Title must be at least ${VALIDATION_LIMITS.TITLE_MIN} characters`,
+    )
+    .max(VALIDATION_LIMITS.TITLE_MAX)
     .required('Title is required'),
-  excerpt: optionalString.max(300, 'Excerpt must be at most 300 characters'),
+  excerpt: optionalString.max(
+    VALIDATION_LIMITS.EXCERPT_MAX,
+    `Excerpt must be at most ${VALIDATION_LIMITS.EXCERPT_MAX} characters`,
+  ),
   content: yup
     .string()
     .trim()
-    .min(10, 'Content must be at least 10 characters')
+    .min(
+      VALIDATION_LIMITS.CONTENT_MIN,
+      `Content must be at least ${VALIDATION_LIMITS.CONTENT_MIN} characters`,
+    )
     .required('Content is required'),
-  imageUrl: optionalString.url('Image URL must be a valid URL'),
+  imageUrl: optionalImageUrl,
 });
 
 export const updatePostSchema = yup.object({
   title: yup
     .string()
     .trim()
-    .min(3, 'Title must be at least 3 characters')
-    .max(200)
+    .min(
+      VALIDATION_LIMITS.TITLE_MIN,
+      `Title must be at least ${VALIDATION_LIMITS.TITLE_MIN} characters`,
+    )
+    .max(VALIDATION_LIMITS.TITLE_MAX)
     .optional(),
-  excerpt: optionalString.max(300, 'Excerpt must be at most 300 characters'),
+  excerpt: optionalString.max(
+    VALIDATION_LIMITS.EXCERPT_MAX,
+    `Excerpt must be at most ${VALIDATION_LIMITS.EXCERPT_MAX} characters`,
+  ),
   content: yup
     .string()
     .trim()
-    .min(10, 'Content must be at least 10 characters')
+    .min(
+      VALIDATION_LIMITS.CONTENT_MIN,
+      `Content must be at least ${VALIDATION_LIMITS.CONTENT_MIN} characters`,
+    )
     .optional(),
-  imageUrl: optionalString.url('Image URL must be a valid URL'),
+  imageUrl: optionalImageUrl,
 });
